@@ -7,8 +7,8 @@
     <Authors>Equibles, Daniel Oliveira</Authors>
     <Company>Equibles</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/daniel3303/ParadeDbEfCore</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/daniel3303/ParadeDbEfCore</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/daniel3303/ParadeDbEntityFrameworkCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/daniel3303/ParadeDbEntityFrameworkCore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
