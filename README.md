@@ -39,7 +39,7 @@ public class Article
 }
 ```
 
-The first parameter is the key field (primary key), followed by the columns to index for full-text search.
+The first parameter is the **key field** (required by pg_search to identify rows for scoring via `pdb.score()`), followed by the columns to index for full-text search. The key field is not searchable — it's only used internally by ParadeDB.
 
 ### 3. Create a migration
 
