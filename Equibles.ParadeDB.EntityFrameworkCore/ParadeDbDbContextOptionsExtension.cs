@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Equibles.ParadeDB.EntityFrameworkCore;
@@ -9,7 +10,8 @@ public sealed class ParadeDbDbContextOptionsExtension : IDbContextOptionsExtensi
 
     public void ApplyServices(IServiceCollection services) {
         new EntityFrameworkRelationalServicesBuilder(services)
-            .TryAdd<IConventionSetPlugin, ParadeDbConventionSetPlugin>();
+            .TryAdd<IConventionSetPlugin, ParadeDbConventionSetPlugin>()
+            .TryAdd<IMethodCallTranslatorPlugin, ParadeDbMethodCallTranslatorPlugin>();
     }
 
     public void Validate(IDbContextOptions options) { }

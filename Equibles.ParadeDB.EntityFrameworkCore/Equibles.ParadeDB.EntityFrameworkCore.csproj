@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Description>EF Core integration for ParadeDB pg_search BM25 full-text search indexes on PostgreSQL. Provides a [Bm25Index] attribute and UseParadeDb() extension for automatic index creation via EF Core conventions.</Description>
+        <Description>EF Core integration for ParadeDB pg_search BM25 full-text search indexes on PostgreSQL. Provides a [Bm25Index] attribute, UseParadeDb() extension, and LINQ query methods for BM25 search, scoring, and snippets.</Description>
         <PackageId>Equibles.ParadeDB.EntityFrameworkCore</PackageId>
+        <!-- PgUnknownBinaryExpression is an Npgsql internal API used by all PostgreSQL EF Core extensions (pgvector, etc.) for custom operators -->
+        <NoWarn>EF1001</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
