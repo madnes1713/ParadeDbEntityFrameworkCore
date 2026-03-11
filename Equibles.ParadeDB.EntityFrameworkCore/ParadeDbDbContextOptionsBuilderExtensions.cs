@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Query;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace Equibles.ParadeDB.EntityFrameworkCore;
@@ -12,6 +13,9 @@ public static class ParadeDbDbContextOptionsBuilderExtensions {
                         ?? new ParadeDbDbContextOptionsExtension();
 
         ((IDbContextOptionsBuilderInfrastructure)builder).AddOrUpdateExtension(extension);
+
+        builder.ReplaceService<IQuerySqlGeneratorFactory, ParadeDbQuerySqlGeneratorFactory>();
+        builder.ReplaceService<IRelationalParameterBasedSqlProcessorFactory, ParadeDbParameterBasedSqlProcessorFactory>();
 
         return npgsqlBuilder;
     }

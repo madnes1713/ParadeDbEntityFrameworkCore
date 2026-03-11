@@ -172,39 +172,39 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
         // ── BM25 Scoring ──────────────────────────────────────────
         if (method == ScoreMethod)
-            return _sql.Function("pdb.score", [arguments[1]],
+            return _sql.Function("pdb.score", [Map(arguments[1])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(double), _typeMappingSource.FindMapping(typeof(double)));
 
         // ── Snippets ──────────────────────────────────────────────
         if (method == SnippetMethod)
-            return _sql.Function("pdb.snippet", [arguments[1]],
+            return _sql.Function("pdb.snippet", [Map(arguments[1])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(string), _typeMappingSource.FindMapping(typeof(string)));
 
         if (method == SnippetParamsMethod)
             return new ParadeDbNamedArgFunctionExpression("pdb.snippet",
-                [arguments[1]],
+                [Map(arguments[1])],
                 [
-                    ("start_tag", arguments[2]),
-                    ("end_tag", arguments[3]),
-                    ("max_num_chars", arguments[4])
+                    ("start_tag", Map(arguments[2])),
+                    ("end_tag", Map(arguments[3])),
+                    ("max_num_chars", Map(arguments[4]))
                 ],
                 typeof(string), _typeMappingSource.FindMapping(typeof(string)));
 
         if (method == SnippetsMethod)
             return new ParadeDbNamedArgFunctionExpression("pdb.snippets",
-                [arguments[1]],
+                [Map(arguments[1])],
                 [
-                    ("max_num_chars", arguments[2]),
-                    ("\"limit\"", arguments[3]),
-                    ("\"offset\"", arguments[4])
+                    ("max_num_chars", Map(arguments[2])),
+                    ("\"limit\"", Map(arguments[3])),
+                    ("\"offset\"", Map(arguments[4]))
                 ],
                 typeof(string), _typeMappingSource.FindMapping(typeof(string)));
 
         // ── Parse Query ───────────────────────────────────────────
         if (method == ParseMethod) {
-            var parseFunc = _sql.Function("pdb.parse", [arguments[2]],
+            var parseFunc = _sql.Function("pdb.parse", [Map(arguments[2])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", parseFunc);
@@ -212,10 +212,10 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
         if (method == ParseFullMethod) {
             var parseFunc = new ParadeDbNamedArgFunctionExpression("pdb.parse",
-                [arguments[2]],
+                [Map(arguments[2])],
                 [
-                    ("lenient", arguments[3]),
-                    ("conjunction_mode", arguments[4])
+                    ("lenient", Map(arguments[3])),
+                    ("conjunction_mode", Map(arguments[4]))
                 ],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", parseFunc);
@@ -223,7 +223,7 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
         // ── Regex Search ──────────────────────────────────────────
         if (method == RegexMethod) {
-            var regexFunc = _sql.Function("pdb.regex", [arguments[2]],
+            var regexFunc = _sql.Function("pdb.regex", [Map(arguments[2])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", regexFunc);
@@ -231,7 +231,7 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
         // ── Phrase Prefix ─────────────────────────────────────────
         if (method == PhrasePrefixMethod) {
-            var phrasePrefixFunc = _sql.Function("pdb.phrase_prefix", [arguments[2]],
+            var phrasePrefixFunc = _sql.Function("pdb.phrase_prefix", [Map(arguments[2])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", phrasePrefixFunc);
@@ -239,22 +239,22 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
         if (method == PhrasePrefixMaxMethod) {
             var phrasePrefixFunc = new ParadeDbNamedArgFunctionExpression("pdb.phrase_prefix",
-                [arguments[3]],
-                [("max_expansions", arguments[2])],
+                [Map(arguments[3])],
+                [("max_expansions", Map(arguments[2]))],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", phrasePrefixFunc);
         }
 
         // ── More Like This ────────────────────────────────────────
         if (method == MoreLikeThisMethod) {
-            var mltFunc = _sql.Function("pdb.more_like_this", [arguments[2]],
+            var mltFunc = _sql.Function("pdb.more_like_this", [Map(arguments[2])],
                 nullable: true, argumentsPropagateNullability: [true],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", mltFunc);
         }
 
         if (method == MoreLikeThisFieldsMethod) {
-            var mltFunc = _sql.Function("pdb.more_like_this", [arguments[2], arguments[3]],
+            var mltFunc = _sql.Function("pdb.more_like_this", [Map(arguments[2]), Map(arguments[3])],
                 nullable: true, argumentsPropagateNullability: [true, true],
                 typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
             return MakeBinaryBool(arguments[1], "@@@", mltFunc);
@@ -265,11 +265,15 @@ public sealed class ParadeDbMethodCallTranslator : IMethodCallTranslator {
 
     // ── Helpers ───────────────────────────────────────────────────────
 
-    private PgUnknownBinaryExpression MakeBinaryBool(SqlExpression left, string op, SqlExpression right) =>
-        new(left, right, op, typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
+    private SqlExpression Map(SqlExpression expr) => _sql.ApplyDefaultTypeMapping(expr);
 
-    private SqlExpression WithModifier(SqlExpression inner, string suffix) =>
-        new ParadeDbModifiedQueryExpression(inner, suffix, inner.Type, inner.TypeMapping);
+    private PgUnknownBinaryExpression MakeBinaryBool(SqlExpression left, string op, SqlExpression right) =>
+        new(Map(left), Map(right), op, typeof(bool), _typeMappingSource.FindMapping(typeof(bool)));
+
+    private SqlExpression WithModifier(SqlExpression inner, string suffix) {
+        var mapped = Map(inner);
+        return new ParadeDbModifiedQueryExpression(mapped, suffix, mapped.Type, mapped.TypeMapping);
+    }
 
     private static int ExtractInt(SqlExpression expr) =>
         expr is SqlConstantExpression { Value: int value }

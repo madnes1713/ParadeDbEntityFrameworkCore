@@ -12,8 +12,6 @@ public sealed class ParadeDbDbContextOptionsExtension : IDbContextOptionsExtensi
         new EntityFrameworkRelationalServicesBuilder(services)
             .TryAdd<IConventionSetPlugin, ParadeDbConventionSetPlugin>()
             .TryAdd<IMethodCallTranslatorPlugin, ParadeDbMethodCallTranslatorPlugin>();
-
-        services.AddSingleton<IQuerySqlGeneratorFactory, ParadeDbQuerySqlGeneratorFactory>();
     }
 
     public void Validate(IDbContextOptions options) { }
