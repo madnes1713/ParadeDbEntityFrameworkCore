@@ -1,6 +1,8 @@
 # Equibles.ParadeDB.EntityFrameworkCore
 
 [![NuGet](https://img.shields.io/nuget/v/Equibles.ParadeDB.EntityFrameworkCore.svg)](https://www.nuget.org/packages/Equibles.ParadeDB.EntityFrameworkCore)
+[![CI](https://github.com/daniel3303/ParadeDbEntityFrameworkCore/actions/workflows/ci.yml/badge.svg)](https://github.com/daniel3303/ParadeDbEntityFrameworkCore/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/daniel3303/ParadeDbEntityFrameworkCore/graph/badge.svg)](https://codecov.io/gh/daniel3303/ParadeDbEntityFrameworkCore)
 
 EF Core integration for [ParadeDB](https://www.paradedb.com/) `pg_search` — BM25 full-text search indexes on PostgreSQL.
 
